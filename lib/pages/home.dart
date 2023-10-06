@@ -1,16 +1,14 @@
-import 'dart:html';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Clientes {
+class Test {
   final String id;
   final String nombre;
   final String edad;
   final String telefono;
 
-  Clientes({
+  Test({
     required this.id,
     required this.nombre,
     required this.edad,
@@ -32,13 +30,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Firestone a clientes',
+      title: 'EVALUACION 2',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.pink,
+          primarySwatch: Colors.red,
         ),
       ),
-      home: const MyHomePage(title: 'Clientes'),
+      home: const MyHomePage(title: 'EVALUACION 2'),
     );
   }
 }
@@ -53,15 +51,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final CollectionReference productosCollection =
-      FirebaseFirestore.instance.collection("tb_productos");
+  final CollectionReference testCollection =
+      FirebaseFirestore.instance.collection("tb_test");
 
   final TextEditingController idController = TextEditingController();
   final TextEditingController nombreController = TextEditingController();
   final TextEditingController edadController = TextEditingController();
   final TextEditingController telefonoController = TextEditingController();
 
-  Future<void> addProducto() async {
+  Future<void> addTest() async {
     String id = idController.text.trim();
     String nombre = nombreController.text.trim();
     String edad = edadController.text.trim();
@@ -71,29 +69,31 @@ class _MyHomePageState extends State<MyHomePage> {
         nombre.isNotEmpty &&
         edad.isNotEmpty &&
         telefono.isNotEmpty) {
-      await tb_testCollection.doc(id).set({
+      await testCollection.doc(id).set({
         'nombre': nombre,
         'edad': edad,
         'telefono': telefono,
       });
+
+      // Limpiar los controladores después de agregar un test
       idController.clear();
       nombreController.clear();
       edadController.clear();
       telefonoController.clear();
 
-      _showSnackbar('Agregado correctamente');
+      _showSnackbar('Test agregado correctamente');
     } else {
       _showSnackbar('Por favor, completa todos los campos');
     }
   }
 
-  Future<List<Clientes>> _getClientes() async {
-    QuerySnapshot Clientes = await tb_testCollection.get();
-    List<Clientes> listaClientes = [];
-    if (Clientes.docs.length != 0) {
-      for (var doc in Clientes.docs) {
+  Future<List<Test>> getTests() async {
+    QuerySnapshot tests = await testCollection.get();
+    List<Test> listaTests = [];
+    if (tests.docs.length != 0) {
+      for (var doc in tests.docs) {
         final data = doc.data() as Map<String, dynamic>;
-        listaClientes.add(Clientes(
+        listaTests.add(Test(
           id: doc.id,
           nombre: data['nombre'] ?? '',
           edad: data['edad'] ?? '',
@@ -101,29 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ));
       }
     }
-    return listaClientes;
-  }
-
-  Future<void> updateClientes(String id) async {
-    await tb_testCollection.doc(id).update({
-      'nombre': nombreController.text,
-      'edad': edadController.text,
-      'telefono': telefonoController.text,
-    });
-
-    // Limpiar los controladores después de actualizar un producto
-    idController.clear();
-    nombreController.clear();
-    edadController.clear();
-    telefonoController.clear();
-
-    _showSnackbar('Datos de los Clientes actualizados correctamente');
-  }
-
-  Future<void> deleteClientes(String id) async {
-    await tb_testCollection.doc(id).delete();
-
-    _showSnackbar('Clientes eliminado correctamente');
+    return listaTests;
   }
 
   void _showSnackbar(String message) {
@@ -134,9 +112,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
-  bool _showUpdateButton = false;
-  Clientes? _selectedClientes;
 
   @override
   Widget build(BuildContext context) {
@@ -152,49 +127,55 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             TextFormField(
               controller: idController,
-              decoration: InputDecoration(labelText: 'ID del Cliente'),
+              decoration: InputDecoration(
+                labelText: 'ID',
+                icon: Icon(Icons.confirmation_number),
+              ),
             ),
             SizedBox(height: 8.0),
             TextFormField(
               controller: nombreController,
-              decoration: InputDecoration(labelText: 'Nombre del Cliente'),
+              decoration: InputDecoration(
+                labelText: 'Nombre',
+                icon: Icon(Icons.person),
+              ),
             ),
             SizedBox(height: 8.0),
             TextFormField(
               controller: edadController,
-              decoration: InputDecoration(labelText: 'Edad del cliente'),
+              decoration: InputDecoration(
+                labelText: 'Edad',
+                icon: Icon(Icons.cake),
+              ),
             ),
             SizedBox(height: 8.0),
             TextFormField(
               controller: telefonoController,
-              decoration: InputDecoration(labelText: 'telefono del cliente'),
+              decoration: InputDecoration(
+                labelText: 'Teléfono',
+                icon: Icon(Icons.phone),
+              ),
             ),
             SizedBox(height: 4.0),
             ElevatedButton(
               onPressed: () {
-                addClientes();
+                addTest();
               },
               style: ElevatedButton.styleFrom(
-                primary: Colors.red, // Cambiar el color del botón
-                padding: EdgeInsets.symmetric(
-                    horizontal: 2, vertical: 0), // Tamaño personalizado
+                primary: Colors.red,
               ),
-              child: Text('Agregar'),
+              child: Container(
+                alignment: Alignment.center,
+                constraints:
+                    BoxConstraints(minWidth: 1, maxWidth: double.infinity),
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Text('Agregar'),
+              ),
             ),
-            SizedBox(height: 8.0),
-            if (_showUpdateButton)
-              ElevatedButton(
-                onPressed: () {
-                  updateClientes(_selectedClientes!.id);
-                  setState(() {
-                    _showUpdateButton = false;
-                  });
-                },
-                child: Text('Actualizar Clientes'),
-              ),
+            SizedBox(height: 6.0),
             Expanded(
-              child: FutureBuilder<List<Clientes>>(
-                future: _getClientes(),
+              child: FutureBuilder<List<Test>>(
+                future: getTests(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
@@ -205,43 +186,21 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Text('Error al cargar los datos'),
                     );
                   } else {
-                    List<Clientes>? Clientes = snapshot.data;
+                    List<Test>? tests = snapshot.data;
                     return DataTable(
                       columns: [
                         DataColumn(label: Text('ID')),
                         DataColumn(label: Text('Nombre')),
                         DataColumn(label: Text('Edad')),
-                        DataColumn(label: Text('telefono')),
+                        DataColumn(label: Text('Teléfono')),
                       ],
-                      rows: Clientes!.map((Clientes) {
-                        return DataRow(
-                          cells: [
-                            DataCell(Text('${Clientes.id}')),
-                            DataCell(Text('${Clientes.nombre}')),
-                            DataCell(Text('${Clientes.edad}')),
-                            DataCell(Text('${Clientes.telefono}')),
-                            DataCell(
-                              Row(
-                                children: [
-                                  IconButton(
-                                    icon: Icon(Icons.edit),
-                                    onPressed: () {
-                                      // Puedes implementar la lógica de edición aquí
-                                      print('Editar: ${Clientes.id}');
-                                    },
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.delete),
-                                    onPressed: () {
-                                      // Puedes implementar la lógica de eliminación aquí
-                                      print('Eliminar: ${Clientes.id}');
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        );
+                      rows: tests!.map((test) {
+                        return DataRow(cells: [
+                          DataCell(Text(test.id)),
+                          DataCell(Text(test.nombre)),
+                          DataCell(Text(test.edad)),
+                          DataCell(Text(test.telefono)),
+                        ]);
                       }).toList(),
                     );
                   }
