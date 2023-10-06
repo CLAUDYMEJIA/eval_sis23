@@ -7,7 +7,7 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
 
-  @verride
+  @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
@@ -22,12 +22,30 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     }
   }
-}
 
-@override
-Widget buid(BuildContext context){
+  @override
+  Widget buid(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+      ),
+      body: const Center(
+        child: Column(
+          children: [Text("Crud a Firebase")],
+        ),
+      ),
+    );
+  }
 
-  return Scaffold(
-    appBar: AppBar()
-  )
+  @override
+  void initState() {
+    super.initState();
+    getEval2();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }
