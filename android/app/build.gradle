@@ -65,6 +65,4 @@ flutter {
     source '../..'
 }
 
-dependencies {
-    implementation(plataform("com.google.firebase:firebase-bom:32.3.1")) 
-}
+dependencies {}

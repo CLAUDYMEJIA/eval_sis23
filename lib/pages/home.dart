@@ -64,8 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> addProducto() async {
     String id = idController.text.trim();
     String nombre = nombreController.text.trim();
-    String precio = edadController.text.trim();
-    String stock = telefonoController.text.trim();
+    String edad = edadController.text.trim();
+    String telefono = telefonoController.text.trim();
 
     if (id.isNotEmpty &&
         nombre.isNotEmpty &&
@@ -73,8 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
         telefono.isNotEmpty) {
       await tb_testCollection.doc(id).set({
         'nombre': nombre,
-        'precio': precio,
-        'stock': stock,
+        'edad': edad,
+        'telefono': telefono,
       });
       idController.clear();
       nombreController.clear();
@@ -87,13 +87,13 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Future<List<Clientes>> _getProductos() async {
+  Future<List<Clientes>> _getClientes() async {
     QuerySnapshot Clientes = await tb_testCollection.get();
-    List<Clientes> listaProductos = [];
+    List<Clientes> listaClientes = [];
     if (Clientes.docs.length != 0) {
       for (var doc in Clientes.docs) {
         final data = doc.data() as Map<String, dynamic>;
-        listaProductos.add(Clientes(
+        listaClientes.add(Clientes(
           id: doc.id,
           nombre: data['nombre'] ?? '',
           edad: data['edad'] ?? '',
@@ -107,8 +107,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> updateClientes(String id) async {
     await tb_testCollection.doc(id).update({
       'nombre': nombreController.text,
-      'precio': edadController.text,
-      'stock': telefonoController.text,
+      'edad': edadController.text,
+      'telefono': telefonoController.text,
     });
 
     // Limpiar los controladores después de actualizar un producto
