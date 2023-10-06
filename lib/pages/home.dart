@@ -30,13 +30,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'EVALUACION 2',
+      title: 'EVAL2',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: Colors.red,
         ),
       ),
-      home: const MyHomePage(title: 'EVALUACION 2'),
+      home: const MyHomePage(title: 'EVAL2'),
     );
   }
 }
