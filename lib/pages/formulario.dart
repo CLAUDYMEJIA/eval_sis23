@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class getEval2 extends StatefulWidget {
@@ -39,11 +37,38 @@ TextField(
     border: OutlineInputBorder(),
     hintText: "Digite su nombre",
     prefixIcon: Icon(Icons.person,
-    color: Colors.red,);
+    color: Colors.red,)
+  ),
+),
+const SizedBox(height: 20,),
+TextField(
+  controller: _edadControllers,
+  keyboardType: TextInputType.text,
+  decoration: const InputDecoration(
+    border: OutlineInputBorder(),
+    hintText: "Digite su edad",
+    prefixIcon: Icon(Icons.person,
+    color: Colors.red,)
+  ),
+),
+const SizedBox(height: 20,),
+TextField(
+  controller: _telefonoControllers,
+  keyboardType: TextInputType.text,
+  decoration: const InputDecoration(
+    border: OutlineInputBorder(),
+    hintText: "Digite su telefono",
+    prefixIcon: Icon(Icons.person,
+    color: Colors.red,)
   ),
 ),
         ],
-      );
+      )
     );
+    
   }
 }
+
+
+
+
